@@ -1,0 +1,17 @@
+{
+  "author": "Blake VanLandingham <blakevanlan@gmail.com>",
+  "name": "Badger-Pusher",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">= 0.10.x",
+    "npm": ">= 2.1.x"
+  },
+  "dependencies": {
+    "apn": "1.6.x",
+    "async": "0.9.x",
+    "firebase": "2.0.x"
+  },
+  "devDependencies": {
+    "debug": "2.1.x"
+  }
+}
