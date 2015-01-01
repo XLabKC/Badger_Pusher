@@ -4,23 +4,23 @@ var Fetcher = function (firebaseRef) {
    this.firebaseRef = firebaseRef;
 }
 
-Fetcher.prototype.getUser = function (userId, done) {
-   var ref = this.firebaseRef.child('users').child(userId);
+Fetcher.prototype.getUser = function (uid, done) {
+   var ref = this.firebaseRef.child('users').child(uid);
    ref.once('value', function (snapshot) {
       var user = snapshot.val();
-      user.userId = userId;
+      user.uid = uid;
       done(null, user);
    });
 };
 
-Fetcher.prototype.getMessage = function (userId, messageId, done) {
-   var ref = this.firebaseRef.child('messages').child(userId).child(messageId);
+Fetcher.prototype.getActiveTask = function (uid, taskId, done) {
+   var ref = this.firebaseRef.child('active_tasks').child(uid).child(taskId);
    ref.once('value', function (snapshot) {
       done(null, snapshot.val());
    });
 };
 
-Fetcher.prototype.getFollowers = function (userId, done) {
+Fetcher.prototype.getFollowers = function (uid, done) {
    var userRef = this.firebaseRef.child('users');
    var followers = [];
    var concurrency = 5; 
@@ -33,7 +33,7 @@ Fetcher.prototype.getFollowers = function (userId, done) {
       });
    }, concurrency);
 
-   userRef.child(userId).child('followers').once('value', function(snapshot) {
+   userRef.child(uid).child('followers').once('value', function(snapshot) {
       snapshot.forEach(function (snapshot) {
          q.push(snapshot.key());
       });
@@ -44,6 +44,12 @@ Fetcher.prototype.getFollowers = function (userId, done) {
    };
 };
 
-
+Fetcher.separateCombinedId = function (combinedId) {
+   var parts = combinedId.split('^');
+   return {
+      uid: parts[0],
+      taskId: parts[1]
+   };
+};
 
 module.exports = Fetcher
