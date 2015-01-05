@@ -22,14 +22,14 @@ module.exports = function (connection, firebaseRef) {
          var user = results.user;
          var name = user.first_name + " " + user.last_name;
          var followers = results.followers;
-         var textStatus = user[status + "_text"].toLowerCase();
+         var textStatus = user[status + '_text'].toLowerCase();
 
          for (var i = 0; i < followers.length; i++) {
-            if (followers[i].status == "free" && followers[i].device &&
+            if (followers[i].status == 'free' && followers[i].device &&
                   followers[i].device.token) {
                var note = new apn.Notification();
                note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
-               note.alert = name + "is now " + textStatus;
+               note.alert = name + ' is now ' + textStatus + '.';
                var device = new apn.Device(followers[i].device.token);
                connection.pushNotification(note, device);
             }

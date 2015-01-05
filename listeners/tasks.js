@@ -30,12 +30,17 @@ module.exports = function (connection, firebaseRef) {
          fetcher.getUser(task.author, function (err, author) {
              // Attempt to send the push notification.
             if (user.device && user.device.token) {
-               // TODO: Check status of the user.
+               if (!shouldSend(user.status, task.priority)) {
+                  debug('user(' + uid +') is not available to receive.');
+                  return;
+               }
                var name = author.first_name + " " + author.last_name;
+               var text = 'New task: ' + task.title + '\nAssigned by: ' + name;
+
                var note = new apn.Notification();
                note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
-               note.alert = "You have a new task from " + name;
-               note.payload = { 'taskFrom': message.author };
+               note.alert = text;
+               note.payload = { 'taskFrom': task.author };
                var device = new apn.Device(user.device.token);
                connection.pushNotification(note, device);
                return;
@@ -47,3 +52,11 @@ module.exports = function (connection, firebaseRef) {
       firebaseRef.child('push_new_task').child(snapshot.key()).remove();
    });
 };
+
+function shouldSend(status, priority) {
+   var statuses = ["free", "occupied", "unavailable"];
+   var priorities = ["low", "medium", "high"];
+   var statusIndex = statuses.indexOf(status);
+   var priorityIndex = priorities.indexOf(priority);
+   return statusIndex <= priorityIndex;
+}
