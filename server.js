@@ -1,7 +1,7 @@
 var apn = require('apn');
 var Firebase = require('firebase');
 
-var ref = new Firebase('https://fiery-inferno-4698.firebaseio.com');
+var ref = new Firebase(process.env.FIREBASE_URL);
 var apnConnection = new apn.Connection({
    passphrase: process.env.KEY_PASSPHRASE
 });
