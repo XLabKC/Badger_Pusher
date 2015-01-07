@@ -40,7 +40,11 @@ module.exports = function (connection, firebaseRef) {
                var note = new apn.Notification();
                note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
                note.alert = text;
-               note.payload = { 'taskFrom': task.author };
+               note.payload = { 
+                  'type': 'new_task',
+                  'author': task.author,
+                  'task': taskId
+               };
                var device = new apn.Device(user.device.token);
                connection.pushNotification(note, device);
                return;
