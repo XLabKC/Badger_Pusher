@@ -36,10 +36,10 @@ module.exports = function (connection, firebaseRef) {
                }
                var name = author.first_name + " " + author.last_name;
                var text = 'New task: ' + task.title + '\nAssigned by: ' + name;
-
                var note = new apn.Notification();
                note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
                note.alert = text;
+               note.sound = 'default';
                note.payload = { 
                   'type': 'new_task',
                   'author': task.author,
