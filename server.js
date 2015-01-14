@@ -6,5 +6,6 @@ var apnConnection = new apn.Connection({
    passphrase: process.env.KEY_PASSPHRASE
 });
 
-require('./listeners/tasks')(apnConnection, ref);
+require('./listeners/newtask')(apnConnection, ref);
+require('./listeners/completedtask')(apnConnection, ref);
 require('./listeners/status')(apnConnection, ref);
