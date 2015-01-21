@@ -30,6 +30,7 @@ module.exports = function (connection, firebaseRef) {
                var note = new apn.Notification();
                note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
                note.alert = name + ' is now ' + textStatus + '.';
+               note.sound = 'default';
                note.payload = { 
                   'type': 'new_status',
                   'uid': uid,
